@@ -1,14 +1,10 @@
 package primer.dw;
 
-import android.annotation.SuppressLint;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -23,6 +19,21 @@ public class DW extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        View decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener
+                (new View.OnSystemUiVisibilityChangeListener() {
+                    @Override
+                    public void onSystemUiVisibilityChange(int visibility) {
+                        // Note that system bars will only be "visible" if none of the
+                        // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
+                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                            hide();;
+                        }
+                    }
+                });
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_fullscreen2);
@@ -31,7 +42,7 @@ public class DW extends AppCompatActivity {
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams
                 (ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        Button scrambleButton = (Button) findViewById(R.id.scramble);
+        ImageView scrambleButton = (ImageView) findViewById(R.id.scramble);
         scrambleButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -51,6 +62,8 @@ public class DW extends AppCompatActivity {
     }
 
     private void scramble(){
+
+        bufferedImage = null;
         Logic.shuffle();
 
         LinearLayout verticalLayout = new LinearLayout(this);
